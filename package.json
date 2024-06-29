@@ -3,7 +3,7 @@
     "node": "16.20.2"
    },
 
-  "name": "airbnb",
+  "name": "StayWave",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",

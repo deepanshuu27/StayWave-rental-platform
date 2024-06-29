@@ -3,9 +3,6 @@ if(process.env.NODE_ENV  != "production"){
 }
  
 
-
-
-
 const express= require("express");
 const app = express();
 
@@ -19,7 +16,6 @@ const ejsMate = require("ejs-mate");
 app.engine("ejs",ejsMate);
 
 
-
 /// Middleware to parse JSON and URL-encoded payloads
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +26,6 @@ const ExpressError= require("./utils/ExpressError.js");
 const listingRouter =require("./routes/listing.js");
 const reviewRouter =require("./routes/review.js");
 const userRouter = require("./routes/user.js");
-
 
 
 
