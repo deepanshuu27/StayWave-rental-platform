@@ -1,0 +1,88 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-3">
+
+    <div class="col-8 offset-2">
+
+     
+    <h3>Create  a new Listing</h3>
+
+    <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input name="title" placeholder="Add a Catchy Title" class="form-control" type="text" autocomplete="off" required>
+
+        <div class="valid-feedback">Title looks good!</div>
+    </div>
+    
+    <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select name="category" id="category" class="form-select" required>
+            <option value="" selected disabled>Select a category</option>
+            <option value="trending">Trending</option>
+            <option value="rooms">Room</option>
+            <option value="beach">Beach</option>
+            <option value="mountain">Mountain</option>
+            <option value="castle">Castle</option>
+            <option value="pool">Pool</option>
+            <option value="camping">Camping</option>
+            <option value="treehouse">Treehouse</option>
+            <option value="arctic">Arctic</option>
+            <option value="boat">Boat</option>
+        </select>
+        <div class="invalid-feedback">Please select a category!</div>
+    </div>
+
+<div class="mb-3">
+    <label for="description" class="form-label"  >Description</label>
+     <textarea name="description"class="form-control" autocomplete="off" required ></textarea>
+     <div class="invalid-feedback"> Please enter a short description!</div>
+</div>
+
+
+<div class="mb-3">
+    <label for="image" class="form-label">Upload Listing Image</label>
+
+    <input name="image" class="form-control" type="file" required />
+</div>
+
+<!-- <div class="mb-3">
+    <label for="image" class="form-label">Image link</label>
+    <input name="image" placeholder="Enter image URL/Link"class="form-control" type="text">
+</div> -->
+
+
+<div class="row">
+<div class="mb-3 col-md-4">
+    <label for="price" class="form-label">Price</label>
+    <input name="price" placeholder="1200" class="form-control" type="number" autocomplete="off" required>
+    <div class="invalid-feedback">Price enter a valid price!</div>
+</div>
+
+
+<div class="mb-3  col-md-8">
+    <label for="country" class="form-label">Country</label>
+    <input name="country" class="form-control" placeholder="India" type="text" autocomplete="off" required>
+    <div class="invalid-feedback"> Country should be valid!</div>
+</div>
+
+</div>
+
+<div class="mb-3">
+
+    <label for="location" class="form-label">Location</label>
+    <input name="location" placeholder="Ambala,Haryana" class=" form-control" autocomplete="off" type="text" required>
+    <div class="invalid-feedback"> location should be valid!</div>
+</div>
+
+
+
+ <button class="btn btn-dark add-btn mt-3 mb-4">Add</button>
+
+ 
+
+</form>
+    
+       </div>
+   </div>

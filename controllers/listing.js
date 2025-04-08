@@ -1,4 +1,5 @@
 const Listing= require("../models/listing.js");
+const mongoose = require("mongoose");
 
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken = process.env.MAPS_TOKEN;
@@ -103,7 +104,11 @@ module.exports.index = async(req,res,next)=>{
         try{
 
           let {id}= req.params;
-      
+          
+          // Validate if ID is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return next(); // skip to 404 or error handler
+    }
           
           // Find the listing by ID and populate the reviews and their authors, and also populate the owner
 

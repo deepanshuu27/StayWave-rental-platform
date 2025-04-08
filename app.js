@@ -7,7 +7,9 @@ const express= require("express");
 const app = express();
 
 const mongoose = require ("mongoose");
-const path= require("path");
+const path = require("path");
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 const method_override=require("method-override");
 app.use(method_override("_method"));

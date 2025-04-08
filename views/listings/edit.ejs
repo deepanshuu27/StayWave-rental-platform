@@ -1,0 +1,80 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-3">
+
+    <div class="col-8 offset-2">
+    <h3>Edit your Listing</h3>
+<form  method="POST" action="/listings/<%= listing._id %>?_method=PUT"  enctype="multipart/form-data" novalidate class="needs-validation" >
+
+ <div class="mb-3">   
+<label for="title" class="form-label">Title</label>
+<input name="title" value="<%= listing.title %>" type ="text" class="form-control" required>
+<div class="valid-feedback">Title looks good!</div>
+</div>
+
+<div class="mb-3">
+    <label for="category" class="form-label">Category</label>
+    <select name="category" id="category" class="form-select">
+        <option value="" disabled <% if (!listing.category) { %> selected <% } %>>Select a category</option>
+        <option value="trending" <% if (listing.category === 'trending') { %> selected <% } %>>Trending</option>
+        <option value="rooms" <% if (listing.category === 'rooms') { %> selected <% } %>>Room</option>
+        <option value="beach" <% if (listing.category === 'beach') { %> selected <% } %>>Beach</option>
+        <option value="mountain" <% if (listing.category === 'mountain') { %> selected <% } %>>Mountain</option>
+        <option value="castle" <% if (listing.category === 'castle') { %> selected <% } %>>Castle</option>
+        <option value="pool" <% if (listing.category === 'pool') { %> selected <% } %>>Pool</option>
+        <option value="camping" <% if (listing.category === 'camping') { %> selected <% } %>>Camping</option>
+        <option value="treehouse" <% if (listing.category === 'treehouse') { %> selected <% } %>>Treehouse</option>
+        <option value="arctic" <% if (listing.category === 'arctic') { %> selected <% } %>>Arctic</option>
+        <option value="boat" <% if (listing.category === 'boat') { %> selected <% } %>>Boat</option>
+    </select>
+    <div class="invalid-feedback">Please select a category!</div>
+</div>
+
+<div class="mb-3">
+<label for="description" class="form-label"   >Description</label>
+<textarea name="description" rows="3"  cols="25" class="form-control"required><%= listing.description %> </textarea>
+<div class="invalid-feedback"> Please enter a short description!</div>
+
+</div>
+
+
+<div class="mb-3">
+    Original Listing Image <br>
+    <img src="<%= previewUrl %>"   height="230" width="300">
+ </div>
+
+<div class="mb-3">
+<label for="image" class="form-label">Upload New Image </label>
+<input name="image" class ="form-control"   type="file"  />
+</div>
+
+
+
+
+<div class="mb-3 col-md-4" >
+<label for="price" class="form-label">Price</label>
+<input name="price"  class="form-control" value="<%= listing.price %>"type="number" required>
+<div class="invalid-feedback">Price enter a valid price!</div>
+</div>
+
+
+<div class="mb-3  col-md-8">
+<label for="country" class="form-label">Country</label>
+<input name="country" class="form-control" value="<%= listing.country%>"type="text" required >
+<div class="invalid-feedback"> Country should be valid!</div>
+</div>
+
+
+
+<div class="mb-3">
+<label for="location" class="form-label">Location</label>
+<input name="location" class="form-control" value="<%=  listing.location %> "type="text"  required>
+<div class="invalid-feedback"> Location should be valid!</div>
+</div>
+
+
+ <button class="btn btn-dark edit-btn mt-2 mb-4">Edit</button>
+
+</form>
+</div>
+</div>
