@@ -5,6 +5,8 @@ const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken = process.env.MAPS_TOKEN;
 const geocodingClient = mbxGeocoding({accessToken: mapToken});
 
+const sendThankYouEmail = require("../utils/sendMail.js");
+
 
 module.exports.search =async (req, res, next) => {
   
@@ -133,46 +135,46 @@ module.exports.index = async(req,res,next)=>{
         };
 
 
-module.exports.createListing = async (req, res, next) => {
-    try {
-        let response = await geocodingClient.forwardGeocode({
-            query: req.body.location,
-            limit: 1,
-        }).send();
+        
 
-        let url = req.file.path;
-        let filename = req.file.filename;
-
-        let { title, description, price, location, country,category } = req.body;
-
-        let newListing = new Listing({
-            title:title,
-            description:description,
-            image: { url, filename },
-            location:location,
-            country:country,
-            category:category,
-            price:price,
-            owner: req.user._id,
-            geometry: response.body.features[0].geometry,
-        });
-
-        const savedListing = await newListing.save();
-
-        req.flash("success", "Listing successfully created! Start receiving bookings now.");
-        res.redirect("/listings");
-
-    } catch (err) {
-        console.log(err);
-        next(err);
-    }
-};
-
-
-
-       
-
-           
+        module.exports.createListing = async (req, res, next) => {
+            try {
+                let response = await geocodingClient.forwardGeocode({
+                    query: req.body.location,
+                    limit: 1,
+                }).send();
+        
+                let url = req.file.path;
+                let filename = req.file.filename;
+        
+                let { title, description, price, location, country, category } = req.body;
+        
+                let newListing = new Listing({
+                    title,
+                    description,
+                    image: { url, filename },
+                    location,
+                    country,
+                    category,
+                    price,
+                    owner: req.user._id,
+                    geometry: response.body.features[0].geometry,
+                });
+        
+                const savedListing = await newListing.save();
+        
+                // ✅ Send thank-you email
+                await sendThankYouEmail(req.user.email, title);   // <-- Make sure user has an 'email' field
+        
+                req.flash("success", "Listing successfully created & email sent!! Start receiving bookings now.");
+                res.redirect("/listings");
+        
+            } catch (err) {
+                console.log(err);
+                next(err);
+            }
+        };
+        
 
 
   module.exports.renderEditForm = async(req,res)=>{
@@ -246,7 +248,7 @@ module.exports.updateListing = async(req,res,next)=>{        // update  listing 
            
         };
 
-        console.log(req.file);
+        
         
         if (typeof req.file !== "undefined") {    // necessay to check because undefined will be updated if image is not uploaded & it'll give error
            let  url = req.file.path;
