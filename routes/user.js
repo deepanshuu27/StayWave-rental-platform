@@ -39,6 +39,13 @@ router.get("/signup",userController.renderSignupForm );
 router.post("/signup", userController.userSignup);
 
 
+// OTP VERIFY ROUTES
+router.get("/verify-otp", userController.renderOTPForm);
+
+router.post("/verify-otp", userController.verifyOTP);
+
+
+
 //LOGIN GET ROUTE
 
 router.get("/login",userController.renderLoginForm );

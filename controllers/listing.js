@@ -5,7 +5,7 @@ const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken = process.env.MAPS_TOKEN;
 const geocodingClient = mbxGeocoding({accessToken: mapToken});
 
-const sendThankYouEmail = require("../utils/sendMail.js");
+const {sendThankYouEmail} = require("../utils/sendMail.js");
 
 
 module.exports.search =async (req, res, next) => {
