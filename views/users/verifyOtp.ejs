@@ -2,13 +2,54 @@
 
 <div class="row mt-3">
   <div class="col-6 offset-3">
-    <h1>Verify OTP</h1>
-    <form action="/verify-otp" method="POST"><br><br>
+    <h1>Verify OTP</h1><br><br>
+
+    <div id="timer" class="mb-3 text-center text-primary fw-bold fs-5">01:00</div>
+
+    <form action="/verify-otp" method="POST" class="mb-4">
       <div class="mb-3">
         <label for="otp" class="form-label">Enter OTP</label>
         <input name="otp" class="form-control" type="text" id="otp" required>
       </div>
-      <button class="btn btn-success">Verify</button>
+      <button class="btn btn-success w-100">Verify</button>
+    </form>
+
+    <form action="/resend-otp" method="POST">
+      <button class="btn btn-outline-secondary w-100">Resend OTP</button>
     </form>
   </div>
 </div>
+
+<script>
+  const OTP_VALIDITY_DURATION = 60 * 1000; // 1 minute in ms
+  const timerElement = document.getElementById("timer");
+
+  // Get expiry time from localStorage
+  let expiryTime = localStorage.getItem("otpExpiryTime");
+
+  if (!expiryTime || Date.now() > expiryTime) {
+    // If expired or not set, create a new one
+    expiryTime = Date.now() + OTP_VALIDITY_DURATION;
+    localStorage.setItem("otpExpiryTime", expiryTime);
+  }
+
+  function updateTimer() {
+    const timeLeft = Math.floor((expiryTime - Date.now()) / 1000);
+
+    if (timeLeft <= 0) {
+      timerElement.textContent = "OTP expired!";
+      localStorage.removeItem("otpExpiryTime");
+      return;
+    }
+
+    const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
+    const seconds = String(timeLeft % 60).padStart(2, "0");
+    timerElement.textContent = `${minutes}:${seconds}`;
+  }
+
+  updateTimer();
+  const intervalId = setInterval(() => {
+    updateTimer();
+    if (Date.now() >= expiryTime) clearInterval(intervalId);
+  }, 1000);
+</script>

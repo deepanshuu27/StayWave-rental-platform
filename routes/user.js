@@ -45,6 +45,8 @@ router.get("/verify-otp", userController.renderOTPForm);
 router.post("/verify-otp", userController.verifyOTP);
 
 
+router.post("/resend-otp", userController.resendOTP);
+
 
 //LOGIN GET ROUTE
 

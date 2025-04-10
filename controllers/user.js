@@ -16,13 +16,15 @@ module.exports.renderSignupForm = (req,res)=>{
 module.exports.userSignup = async (req, res) => {
   const { username, email, password } = req.body;
 
-  // Generate 6-digit OTP
-  const otp = crypto.randomInt(100000, 999999).toString();
+  // Generate 6-digit OTP using crypto.randomBytes
+  const buffer = crypto.randomBytes(3); // 3 bytes = 6 hex digits
+  const otp = (parseInt(buffer.toString("hex"), 16) % 1000000).toString().padStart(6, '0');
 
-  // Store data in session for OTP verification
-  req.session.signupData = { username, email, password, otp };
+  const otpExpiry = Date.now() + 5 * 60 * 1000; // expires in 5 minutes
 
-  try {
+ req.session.signupData = { username, email, password, otp, otpExpiry };
+ 
+ try {
     await sendOtpEmail(email, username, otp);
     console.log("✅ OTP email sent to:", email);
     res.redirect("/verify-otp");
@@ -32,6 +34,7 @@ module.exports.userSignup = async (req, res) => {
     res.redirect("/signup");
   }
 };
+
 
 
 
@@ -51,11 +54,19 @@ module.exports.verifyOTP = async (req, res, next) => {
     return res.redirect("/signup");
   }
 
-  if (otp === sessionData.otp) {
+  const { otp: sessionOtp, otpExpiry } = sessionData;
+
+  if (Date.now() > otpExpiry) {
+    req.session.signupData = null; // clear expired data
+    req.flash("error", "OTP expired. Please sign up again.");
+    return res.redirect("/signup");
+  }
+
+  if (otp === sessionOtp) {
     try {
       const { username, email, password } = sessionData;
 
-      let newUser = new User({ username, email });
+      const newUser = new User({ username, email });
       const registeredUser = await User.register(newUser, password);
 
       delete req.session.signupData;
@@ -77,14 +88,40 @@ module.exports.verifyOTP = async (req, res, next) => {
 
 
 
-
-
-
-
 // LOGIN FORM RENDER GET REQUEST
 module.exports.renderLoginForm = (req,res)=>{
     res.render("./users/login.ejs");
   };
+
+
+
+  module.exports.resendOTP = async (req, res) => {
+    const sessionData = req.session.signupData;
+  
+    if (!sessionData) {
+      req.flash("error", "Session expired. Please sign up again.");
+      return res.redirect("/signup");
+    }
+  
+    // Generate new OTP and expiry
+    const otp = crypto.randomInt(100000, 999999).toString();
+    const otpExpiry = Date.now() + 1 * 60 * 1000;
+  
+    // Update session data  
+    req.session.signupData.otp = otp;
+    req.session.signupData.otpExpiry = otpExpiry;
+  
+    try {
+      await sendOtpEmail(sessionData.email, sessionData.username, otp);
+      req.flash("success", "New OTP sent to your email.");
+      res.redirect("/verify-otp");
+    } catch (err) {
+      console.error("❌ Error resending OTP:", err);
+      req.flash("error", "Failed to resend OTP. Try again.");
+      res.redirect("/verify-otp");
+    }
+  };
+  
 
 
 

@@ -17,21 +17,35 @@ const sendOtpEmail = async (userEmail, username, otp) => {
       subject: "🔐 StayWave OTP Verification - Complete Your Signup",
       html: `
         <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 40px;">
-          <div style="max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h2 style="color: #00bfa6; text-align: center;">Welcome to StayWave 🏖️</h2>
-            <p style="font-size: 16px;">Hi <strong>${username}</strong>,</p>
-            <p>Thank you for signing up on <strong>StayWave</strong>. To verify your email, please use the OTP below:</p>
-            
-            <div style="text-align: center; margin: 30px 0;">
-              <span style="font-size: 28px; letter-spacing: 5px; font-weight: bold; color: #00bfa6;">${otp}</span>
+        
+          <!-- 🔔 Top Alert Message -->
+          <p style="text-align: center; font-size: 14px; color: #555; margin-bottom: 20px;">
+            ⚠️ This OTP is valid only for 1 minute. Do not share it with anyone.
+          </p>
+
+          <!-- 📢 Banner -->
+          <div style="max-width: 600px; margin: auto;">
+            <div style="background-color: #00bfa6; color: white; padding: 12px 20px; text-align: center; font-size: 18px; font-weight: bold; border-radius: 6px 6px 0 0;">
+              🛡️ StayWave - Secure Signup Verification
             </div>
 
-            <p>This OTP is valid for <strong>5 minutes</strong>. Please do not share it with anyone.</p>
-            <p>If you did not try to register, you can ignore this email.</p>
+            <!-- Email Body -->
+            <div style="background: white; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+              <h2 style="color: #00bfa6; text-align: center;">Welcome to StayWave 🏖️</h2>
+              <p style="font-size: 16px;">Hi <strong>${username}</strong>,</p>
+              <p>Thank you for signing up on <strong>StayWave</strong>. To verify your email, please use the OTP below:</p>
+              
+              <div style="text-align: center; margin: 30px 0;">
+                <span style="font-size: 28px; letter-spacing: 5px; font-weight: bold; color: #00bfa6;">${otp}</span>
+              </div>
 
-            <hr style="margin: 30px 0;">
-            <p style="font-size: 14px; color: #999;">Need help? Reach out at support@staywave.com</p>
-            <p style="font-size: 14px; color: #999;">Stay awesome,<br><strong>The StayWave Team</strong></p>
+              <p>This OTP is valid for <strong>1 minute</strong>. Please do not share it with anyone.</p>
+              <p>If you did not try to register, you can ignore this email.</p>
+
+              <hr style="margin: 30px 0;">
+              <p style="font-size: 14px; color: #999;">Need help? Reach out at support@staywave.com</p>
+              <p style="font-size: 14px; color: #999;">Stay awesome,<br><strong>The StayWave Team</strong></p>
+            </div>
           </div>
         </div>
       `,
@@ -42,6 +56,8 @@ const sendOtpEmail = async (userEmail, username, otp) => {
     console.error("❌ OTP Email send failed:", err);
   }
 };
+
+
 
 // ✅ Thank You Email
 const sendThankYouEmail = async (userEmail, listingTitle) => {
